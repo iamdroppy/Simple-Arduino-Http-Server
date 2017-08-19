@@ -8,12 +8,8 @@ HttpRequest::HttpRequest(EthernetClient ethernetClient)
 
 HttpRequest::~HttpRequest()
 {
-}
-
-HttpRequest* HttpRequest::setHeaderCallback(void* headerCallback)
-{
-	_headerCallback = headerCallback;
-	return this;
+	// TODO: disconnect client.
+	delete &_userClient;
 }
 
 void HttpRequest::handleClient()
@@ -24,10 +20,9 @@ void HttpRequest::handleClient()
 void HttpRequest::readHeader()
 {
 	String header;
-	int maxLines = 32;
+	int maxHeaders = 32;
 
-	Serial.println("Starting to read header.");
-	for (int lines = 0; lines < maxLines; lines++)
+	for (int lines = 0; lines < maxHeaders; lines++)
 	{
 		if (!_userClient.connected() || !_userClient.available())
 			break;
@@ -38,13 +33,13 @@ void HttpRequest::readHeader()
 			String uri = readUntilSpace();
 			_userClient.println("VERB: "+ verb + "\r\nUri: " + uri);
 
-			_userClient.stop();
-
 			if (verb == "GET") {
 				// fake large response..
 				if (uri == "/largeresponse")
 					delay(5000);
 			}
+
+			_userClient.stop();
 		}
 		else {
 		}

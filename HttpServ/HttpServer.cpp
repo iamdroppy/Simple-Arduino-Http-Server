@@ -1,6 +1,5 @@
 #include "HttpServer.h"
 
-typedef EthernetClass ethernetClass;
 HttpServer::HttpServer(int port)
 {
 	_ethernetServer = new EthernetServer(port);
@@ -14,10 +13,6 @@ HttpServer::~HttpServer()
 	_ipAddr = nullptr;
 }
 
-void HttpServer::setHeaderCallback(void* headerCallback)
-{
-}
-
 bool HttpServer::begin()
 {
 	_ethernetServer->begin();
@@ -27,6 +22,8 @@ bool HttpServer::begin()
 
 void HttpServer::setPinCallback(int pin, PinCallback callbackType)
 {
+	pinMode(pin, OUTPUT); // sets pin as output mode.
+
 	if (callbackType == (PinCallback)OnAvailable)
 		_onAvailablePin = pin;
 	else if (callbackType == (PinCallback)OnProcessing)

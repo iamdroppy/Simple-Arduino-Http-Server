@@ -15,18 +15,12 @@ class HttpRequest
 public:
 	HttpRequest(EthernetClient ethernetClient);
 	~HttpRequest();
-
-	HttpRequest* setHeaderCallback(void* headerCallback);
-
 	void readHeader();
 	void handleClient();
-
-	String readHeaderKey();
-	String readHeaderValue();
 	String readLine();
 	String readUntilSpace();
-
 	bool connected();
+
 private:
 	EthernetClient _userClient;
 	void* _headerCallback;
